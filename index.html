@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="Calculator">
+        <input type="text" placeholder="0" id="outputscreen" />
+        <button onclick="Clear()">AC</button>
+        <button class="btn" onclick="del()">C</button>
+        <button onclick="display('%')">%</button>
+        <button onclick="display('/')">/</button>
+        <button onclick="display('7')">7</button>
+        <button onclick="display('8')">8</button>
+        <button onclick="display('9')">9</button>
+        <button onclick="display('*')">*</button>
+        <button onclick="display('4')">4</button>
+        <button onclick="display('5')">5</button>
+        <button onclick="display('6')">6</button>
+        <button onclick="display('-')">-</button>
+        <button onclick="display('1')">1</button>
+        <button onclick="display('2')">2</button>
+        <button onclick="display('3')">3</button>
+        <button onclick="display('+')">+</button>
+        <button onclick="display('.')">.</button>
+        <button onclick="display('0')">0</button>
+        <button onclick="toggleNegative()">+/-</button>
+        <button onclick="Calculate()" class="equal">=</button>
+      </div>
+    </div>
+
+    <script>
+      let outputScreen = document.getElementById("outputscreen");
+
+      function display(num) {
+        if (num === "%") {
+          // Menghitung persentase
+          outputScreen.value = parseFloat(outputScreen.value) / 100;
+        } else if (["+", "-", "*", "/"].includes(num)) {
+          // Menyaring masukan operator yang tidak valid
+          if (
+            outputScreen.value.endsWith("+") ||
+            outputScreen.value.endsWith("-") ||
+            outputScreen.value.endsWith("*") ||
+            outputScreen.value.endsWith("/")
+          ) {
+            // Hapus operator sebelumnya jika pengguna memasukkan operator yang sama
+            outputScreen.value = outputScreen.value.slice(0, -1);
+          }
+          outputScreen.value += num;
+        } else {
+          outputScreen.value += num;
+        }
+      }
+
+      function toggleNegative() {
+        let currentValue = outputScreen.value;
+        if (currentValue.startsWith("-")) {
+          outputScreen.value = currentValue.slice(1);
+        } else {
+          outputScreen.value = "-" + currentValue;
+        }
+      }
+
+      function Calculate() {
+        try {
+          // Memperbaiki nilai - menjadi negatif sebelum melakukan evaluasi
+          let expression = outputScreen.value.replace(/-/g, "-1*");
+          outputScreen.value = eval(expression);
+        } catch (err) {
+          alert("Invalid");
+        }
+      }
+
+      function Clear() {
+        outputScreen.value = "";
+      }
+
+      function del() {
+        outputScreen.value = outputScreen.value.slice(0, -1);
+      }
+    </script>
+  </body>
+</html>
